@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NO.S X | Graphics Engine</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#050505;
+    color:#fff;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:
+        radial-gradient(circle at 20% 10%,rgba(255,0,0,.16),transparent 30%),
+        radial-gradient(circle at 90% 80%,rgba(255,0,0,.10),transparent 30%);
+    z-index:-1;
+}
+
+.topbar{
+    height:75px;
+    border-bottom:1px solid #292929;
+    background:rgba(8,8,8,.92);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 35px;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.logo span{
+    color:#ff2020;
+}
+
+.status{
+    color:#ff3030;
+    font-size:12px;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+.back-btn{
+    background:#111;
+    border:1px solid #333;
+    color:#fff;
+    padding:11px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.back-btn:hover{
+    border-color:#ff2020;
+    color:#ff3030;
+}
+
+.container{
+    max-width:1250px;
+    margin:auto;
+    padding:35px;
+}
+
+.heading{
+    margin-bottom:28px;
+}
+
+.heading h1{
+    font-size:36px;
+    margin-bottom:8px;
+}
+
+.heading h1 span{
+    color:#ff2020;
+}
+
+.heading p{
+    color:#888;
+    font-size:14px;
+}
+
+.card{
+    background:linear-gradient(145deg,#111,#090909);
+    border:1px solid #292929;
+    border-radius:16px;
+    padding:25px;
+    margin-bottom:22px;
+    box-shadow:0 15px 45px rgba(0,0,0,.35);
+}
+
+.card-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:22px;
+}
+
+.card-title h2{
+    font-size:19px;
+}
+
+.card-title span{
+    color:#ff2020;
+    font-size:12px;
+    font-weight:bold;
+}
+
+/* PRESETS */
+
+.presets{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.preset{
+    background:#0b0b0b;
+    border:1px solid #292929;
+    border-radius:12px;
+    padding:22px 15px;
+    text-align:center;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.preset:hover{
+    border-color:#ff2020;
+    transform:translateY(-3px);
+}
+
+.preset.active{
+    border-color:#ff2020;
+    background:linear-gradient(145deg,#170606,#0b0b0b);
+    box-shadow:0 0 20px rgba(255,0,0,.12);
+}
+
+.preset-icon{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+.preset h3{
+    font-size:15px;
+    margin-bottom:5px;
+}
+
+.preset p{
+    color:#777;
+    font-size:11px;
+}
+
+/* SETTINGS */
+
+.settings-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.setting{
+    background:#0b0b0b;
+    border:1px solid #252525;
+    border-radius:12px;
+    padding:18px;
+}
+
+.setting-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+}
+
+.setting-head h3{
+    font-size:14px;
+}
+
+.value{
+    color:#ff3030;
+    font-size:12px;
+    font-weight:bold;
+}
+
+select{
+    width:100%;
+    background:#151515;
+    border:1px solid #333;
+    color:#fff;
+    padding:12px;
+    border-radius:8px;
+    outline:none;
+}
+
+select:focus{
+    border-color:#ff2020;
+}
+
+input[type="range"]{
+    width:100%;
+    accent-color:#ff2020;
+}
+
+/* TOGGLES */
+
+.toggle-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:15px 0;
+    border-bottom:1px solid #202020;
+}
+
+.toggle-row:last-child{
+    border-bottom:none;
+}
+
+.toggle-info h3{
+    font-size:14px;
+    margin-bottom:4px;
+}
+
+.toggle-info p{
+    color:#666;
+    font-size:11px;
+}
+
+.switch{
+    width:48px;
+    height:25px;
+    background:#252525;
+    border-radius:20px;
+    position:relative;
+    cursor:pointer;
+}
+
+.switch::after{
+    content:"";
+    width:19px;
+    height:19px;
+    background:#777;
+    border-radius:50%;
+    position:absolute;
+    top:3px;
+    left:3px;
+    transition:.2s;
+}
+
+.switch.active{
+    background:#4b0909;
+}
+
+.switch.active::after{
+    left:26px;
+    background:#ff2020;
+}
+
+/* PREVIEW */
+
+.preview{
+    height:230px;
+    border-radius:13px;
+    border:1px solid #292929;
+    background:
+        linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.7)),
+        radial-gradient(circle at 50% 40%,#451010,#090909 60%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+}
+
+.preview::before{
+    content:"";
+    width:190px;
+    height:190px;
+    border:2px solid rgba(255,40,40,.35);
+    border-radius:50%;
+    box-shadow:
+        0 0 30px rgba(255,0,0,.25),
+        inset 0 0 30px rgba(255,0,0,.15);
+}
+
+.preview-text{
+    position:absolute;
+    text-align:center;
+}
+
+.preview-text h2{
+    font-size:25px;
+    letter-spacing:3px;
+}
+
+.preview-text p{
+    color:#888;
+    font-size:11px;
+    margin-top:7px;
+}
+
+/* BUTTONS */
+
+.actions{
+    display:flex;
+    gap:12px;
+    margin-top:20px;
+}
+
+.btn{
+    border:none;
+    padding:13px 22px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.apply{
+    background:#ff2020;
+    color:#fff;
+    box-shadow:0 0 20px rgba(255,0,0,.18);
+}
+
+.apply:hover{
+    background:#ff3434;
+}
+
+.reset{
+    background:#171717;
+    color:#aaa;
+    border:1px solid #333;
+}
+
+.reset:hover{
+    color:#fff;
+    border-color:#555;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:#111;
+    border:1px solid #ff2020;
+    color:#fff;
+    padding:14px 20px;
+    border-radius:9px;
+    font-size:13px;
+    transform:translateY(100px);
+    opacity:0;
+    transition:.3s;
+    z-index:50;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:850px){
+
+    .topbar{
+        padding:0 18px;
+    }
+
+    .container{
+        padding:25px 18px;
+    }
+
+    .heading h1{
+        font-size:28px;
+    }
+
+    .presets{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .settings-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:500px){
+
+    .status{
+        display:none;
+    }
+
+    .topbar{
+        height:65px;
+    }
+
+    .logo{
+        font-size:19px;
+    }
+
+    .presets{
+        grid-template-columns:1fr;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="logo">
+        NO.S <span>×</span>
+    </div>
+
+    <div class="status">
+        ● GRAPHICS ENGINE ONLINE
+    </div>
+
+    <button class="back-btn" onclick="window.location.href='dashboard.html'">
+        ← Dashboard
+    </button>
+
+</header>
+
+
+<main class="container">
+
+    <section class="heading">
+
+        <h1>
+            GRAPHICS <span>ENGINE</span>
+        </h1>
+
+        <p>
+            Configure your gaming graphics profile
+        </p>
+
+    </section>
+
+
+    <!-- GRAPHICS PRESETS -->
+
+    <section class="card">
+
+        <div class="card-title">
+            <h2>Graphics Presets</h2>
+            <span id="presetStatus">BALANCED</span>
+        </div>
+
+        <div class="presets">
+
+            <div class="preset"
+                 onclick="selectPreset(this,'LOW')">
+
+                <div class="preset-icon">◌</div>
+
+                <h3>Low</h3>
+
+                <p>Maximum performance</p>
+
+            </div>
+
+
+            <div class="preset active"
+                 onclick="selectPreset(this,'BALANCED')">
+
+                <div class="preset-icon">◉</div>
+
+                <h3>Balanced</h3>
+
+                <p>Performance + quality</p>
+
+            </div>
+
+
+            <div class="preset"
+                 onclick="selectPreset(this,'HIGH')">
+
+                <div class="preset-icon">◆</div>
+
+                <h3>High</h3>
+
+                <p>Enhanced visuals</p>
+
+            </div>
+
+
+            <div class="preset"
+                 onclick="selectPreset(this,'ULTRA')">
+
+                <div class="preset-icon">✦</div>
+
+                <h3>Ultra</h3>
+
+                <p>Maximum visual quality</p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- DISPLAY SETTINGS -->
+
+    <section class="card">
+
+        <div class="card-title">
+
+            <h2>Display Configuration</h2>
+
+            <span>DISPLAY</span>
+
+        </div>
+
+
+        <div class="settings-grid">
+
+            <div class="setting">
+
+                <div class="setting-head">
+
+                    <h3>Resolution</h3>
+
+                </div>
+
+                <select id="resolution">
+
+                    <option>1280 × 720</option>
+                    <option selected>1920 × 1080</option>
+                    <option>2560 × 1440</option>
+                    <option>3840 × 2160</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-head">
+
+                    <h3>Texture Quality</h3>
+
+                </div>
+
+                <select id="texture">
+
+                    <option>Low</option>
+                    <option selected>Medium</option>
+                    <option>High</option>
+                    <option>Ultra</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-head">
+
+                    <h3>Shadow Quality</h3>
+
+                </div>
+
+                <select id="shadows">
+
+                    <option>Off</option>
+                    <option selected>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-head">
+
+                    <h3>Anti-Aliasing</h3>
+
+                </div>
+
+                <select id="anti">
+
+                    <option>Off</option>
+                    <option selected>FXAA</option>
+                    <option>TAA</option>
+                    <option>MSAA</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- VISUAL CONTROLS -->
+
+    <section class="card">
+
+        <div class="card-title">
+
+            <h2>Visual Controls</h2>
+
+            <span>FINE TUNE</span>
+
+        </div>
+
+
+        <div class="settings-grid">
+
+            <div class="setting">
+
+                <div class="setting-head">
+
+                    <h3>Brightness</h3>
+
+                    <span class="value" id="brightnessValue">
+                        50%
+                    </span>
+
+                </div>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="50"
+                    oninput="updateValue('brightnessValue',this.value)"
+                >
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-head">
+
+                    <h3>Effects Quality</h3>
+
+                    <span class="value" id="effectsValue">
+                        70%
+                    </span>
+
+                </div>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="70"
+                    oninput="updateValue('effectsValue',this.value)"
+                >
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-head">
+
+                    <h3>View Distance</h3>
+
+                    <span class="value" id="viewValue">
+                        80%
+                    </span>
+
+                </div>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="80"
+                    oninput="updateValue('viewValue',this.value)"
+                >
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-head">
+
+                    <h3>Image Sharpness</h3>
+
+                    <span class="value" id="sharpValue">
+                        65%
+                    </span>
+
+                </div>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="65"
+                    oninput="updateValue('sharpValue',this.value)"
+                >
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- EXTRA GRAPHICS -->
+
+    <section class="card">
+
+        <div class="card-title">
+
+            <h2>Graphics Features</h2>
+
+            <span>ADVANCED</span>
+
+        </div>
+
+
+        <div class="toggle-row">
+
+            <div class="toggle-info">
+
+                <h3>Dynamic Shadows</h3>
+
+                <p>Enhanced environmental shadow effects</p>
+
+            </div>
+
+            <div
+                class="switch active"
+                onclick="toggleSwitch(this)"
+            ></div>
+
+        </div>
+
+
+        <div class="toggle-row">
+
+            <div class="toggle-info">
+
+                <h3>High Quality Effects</h3>
+
+                <p>Improve particles and visual effects</p>
+
+            </div>
+
+            <div
+                class="switch active"
+                onclick="toggleSwitch(this)"
+            ></div>
+
+        </div>
+
+
+        <div class="toggle-row">
+
+            <div class="toggle-info">
+
+                <h3>Texture Filtering</h3>
+
+                <p>Sharper textures at distance</p>
+
+            </div>
+
+            <div
+                class="switch active"
+                onclick="toggleSwitch(this)"
+            ></div>
+
+        </div>
+
+
+        <div class="toggle-row">
+
+            <div class="toggle-info">
+
+                <h3>Performance Effects</h3>
+
+                <p>Reduce visual load in performance mode</p>
+
+            </div>
+
+            <div
+                class="switch"
+                onclick="toggleSwitch(this)"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PREVIEW -->
+
+    <section class="card">
+
+        <div class="card-title">
+
+            <h2>Graphics Preview</h2>
+
+            <span id="previewPreset">BALANCED</span>
+
+        </div>
+
+        <div class="preview">
+
+            <div class="preview-text">
+
+                <h2>NO.S ×</h2>
+
+                <p>GRAPHICS ENGINE</p>
+
+            </div>
+
+        </div>
+
+
+        <div class="actions">
+
+            <button
+                class="btn apply"
+                onclick="applyGraphics()"
+            >
+                APPLY GRAPHICS PROFILE
+            </button>
+
+            <button
+                class="btn reset"
+                onclick="resetGraphics()"
+            >
+                RESET
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<div class="toast" id="toast">
+    Graphics profile applied
+</div>
+
+
+<script>
+
+let currentPreset = "BALANCED";
+
+
+function selectPreset(element,name){
+
+    document
+        .querySelectorAll(".preset")
+        .forEach(item => {
+            item.classList.remove("active");
+        });
+
+    element.classList.add("active");
+
+    currentPreset = name;
+
+    document.getElementById("presetStatus").textContent = name;
+
+    document.getElementById("previewPreset").textContent = name;
+
+    showToast(name + " graphics profile selected");
+}
+
+
+function updateValue(id,value){
+
+    document.getElementById(id).textContent =
+        value + "%";
+
+}
+
+
+function toggleSwitch(element){
+
+    element.classList.toggle("active");
+
+}
+
+
+function applyGraphics(){
+
+    showToast(
+        "Graphics profile applied: " + currentPreset
+    );
+
+}
+
+
+function resetGraphics(){
+
+    currentPreset = "BALANCED";
+
+    document
+        .querySelectorAll(".preset")
+        .forEach(item => {
+            item.classList.remove("active");
+        });
+
+    document
+        .querySelectorAll(".preset")[1]
+        .classList.add("active");
+
+    document.getElementById("presetStatus").textContent =
+        "BALANCED";
+
+    document.getElementById("previewPreset").textContent =
+        "BALANCED";
+
+    showToast("Graphics settings reset");
+
+}
+
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    setTimeout(() => {
+
+        toast.classList.remove("show");
+
+    },2500);
+
+}
+
+</script>
+
+</body>
+              </html>
