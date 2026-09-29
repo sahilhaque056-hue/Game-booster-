@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NO.S X | Game Library</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#030303;
+    color:#fff;
+}
+
+/* BACKGROUND */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-2;
+
+    background:
+    radial-gradient(
+        circle at 50% 10%,
+        rgba(255,0,0,.13),
+        transparent 35%
+    ),
+    #030303;
+}
+
+.grid{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+
+    opacity:.08;
+
+    background-image:
+    linear-gradient(
+        rgba(255,0,0,.4) 1px,
+        transparent 1px
+    ),
+    linear-gradient(
+        90deg,
+        rgba(255,0,0,.4) 1px,
+        transparent 1px
+    );
+
+    background-size:45px 45px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+    height:75px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 5%;
+
+    background:rgba(5,0,0,.85);
+
+    border-bottom:1px solid #321010;
+
+    backdrop-filter:blur(15px);
+
+    position:sticky;
+    top:0;
+
+    z-index:50;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:1000;
+
+    letter-spacing:4px;
+
+    text-shadow:
+    0 0 15px rgba(255,0,0,.7);
+}
+
+.logo span{
+    color:#ff1111;
+}
+
+.back{
+    padding:10px 16px;
+
+    border:1px solid #451010;
+
+    border-radius:6px;
+
+    background:#090303;
+
+    color:#aaa;
+
+    cursor:pointer;
+
+    font-size:11px;
+
+    transition:.25s;
+}
+
+.back:hover{
+    color:#fff;
+
+    border-color:#ff0000;
+
+    box-shadow:
+    0 0 15px rgba(255,0,0,.2);
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.container{
+    max-width:1250px;
+
+    margin:auto;
+
+    padding:35px 20px 60px;
+}
+
+.page-head{
+    display:flex;
+
+    align-items:end;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    margin-bottom:25px;
+}
+
+.page-head h1{
+    font-size:32px;
+
+    letter-spacing:1px;
+}
+
+.page-head h1 span{
+    color:#ff1111;
+}
+
+.page-head p{
+    margin-top:8px;
+
+    color:#666;
+
+    font-size:12px;
+}
+
+
+/* SEARCH */
+
+.search{
+    width:280px;
+
+    padding:13px 15px;
+
+    outline:none;
+
+    border:1px solid #351010;
+
+    border-radius:6px;
+
+    background:#080303;
+
+    color:#fff;
+}
+
+.search:focus{
+    border-color:#ff0000;
+
+    box-shadow:
+    0 0 15px rgba(255,0,0,.12);
+}
+
+.search::placeholder{
+    color:#444;
+}
+
+
+/* =========================
+   GAME GRID
+========================= */
+
+.game-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:15px;
+}
+
+.game-card{
+    position:relative;
+
+    overflow:hidden;
+
+    padding:14px;
+
+    border:1px solid #291010;
+
+    border-radius:9px;
+
+    background:
+    linear-gradient(
+        145deg,
+        #0d0303,
+        #050202
+    );
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.game-card:hover{
+    transform:translateY(-5px);
+
+    border-color:#7b1111;
+
+    box-shadow:
+    0 12px 35px rgba(255,0,0,.12);
+}
+
+.game-card.selected{
+    border-color:#ff0000;
+
+    box-shadow:
+    0 0 25px rgba(255,0,0,.18);
+}
+
+.game-art{
+    height:145px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:7px;
+
+    border:1px solid #321010;
+
+    background:
+    radial-gradient(
+        circle,
+        #300505,
+        #070202 70%
+    );
+
+    font-size:55px;
+
+    margin-bottom:14px;
+
+    text-shadow:
+    0 0 25px #ff0000;
+}
+
+.game-card h3{
+    font-size:13px;
+
+    letter-spacing:1px;
+}
+
+.game-card p{
+    margin-top:6px;
+
+    color:#555;
+
+    font-size:10px;
+}
+
+.status{
+    display:inline-block;
+
+    margin-top:12px;
+
+    padding:5px 8px;
+
+    border-radius:4px;
+
+    background:#180303;
+
+    color:#ff2929;
+
+    font-size:8px;
+
+    letter-spacing:1px;
+}
+
+
+/* =========================
+   SELECTED GAME
+========================= */
+
+.profile{
+    display:none;
+
+    margin-top:25px;
+
+    padding:25px;
+
+    border:1px solid #4a1010;
+
+    border-radius:9px;
+
+    background:
+    linear-gradient(
+        120deg,
+        #110303,
+        #050202
+    );
+
+    animation:appear .3s ease;
+}
+
+.profile.show{
+    display:block;
+}
+
+@keyframes appear{
+
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+.profile-top{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:20px;
+}
+
+.profile-title{
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+}
+
+.profile-icon{
+    width:70px;
+    height:70px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border:1px solid #6b1111;
+
+    border-radius:8px;
+
+    background:#190303;
+
+    font-size:30px;
+
+    box-shadow:
+    inset 0 0 20px rgba(255,0,0,.1);
+}
+
+.profile-title h2{
+    font-size:23px;
+}
+
+.profile-title p{
+    margin-top:6px;
+
+    color:#666;
+
+    font-size:10px;
+}
+
+.launch{
+    padding:13px 22px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #850000,
+        #ff0000
+    );
+
+    color:#fff;
+
+    font-weight:bold;
+
+    letter-spacing:1px;
+
+    cursor:pointer;
+
+    box-shadow:
+    0 0 20px rgba(255,0,0,.25);
+
+    transition:.25s;
+}
+
+.launch:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 0 30px rgba(255,0,0,.5);
+}
+
+
+/* =========================
+   PROFILE OPTIONS
+========================= */
+
+.options{
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:12px;
+
+    margin-top:25px;
+}
+
+.option{
+    padding:15px;
+
+    border:1px solid #281010;
+
+    border-radius:6px;
+
+    background:#060202;
+}
+
+.option label{
+    display:block;
+
+    color:#666;
+
+    font-size:9px;
+
+    letter-spacing:1px;
+
+    margin-bottom:8px;
+}
+
+.option strong{
+    color:#ff1818;
+
+    font-size:15px;
+}
+
+
+/* =========================
+   NO RESULT
+========================= */
+
+.no-result{
+    display:none;
+
+    padding:50px;
+
+    text-align:center;
+
+    color:#555;
+
+    border:1px solid #241010;
+
+    border-radius:8px;
+
+    margin-top:20px;
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+
+    right:25px;
+    bottom:25px;
+
+    padding:14px 18px;
+
+    border:1px solid #741111;
+
+    border-radius:6px;
+
+    background:#100303;
+
+    color:#fff;
+
+    font-size:11px;
+
+    box-shadow:
+    0 0 25px rgba(255,0,0,.2);
+
+    transform:translateY(100px);
+
+    opacity:0;
+
+    transition:.3s;
+
+    z-index:100;
+}
+
+.toast.show{
+    transform:translateY(0);
+
+    opacity:1;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+    .game-grid{
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+    .options{
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:600px){
+
+    .page-head{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .search{
+        width:100%;
+    }
+
+    .game-grid{
+        grid-template-columns:1fr;
+    }
+
+    .profile-top{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .options{
+        grid-template-columns:1fr;
+    }
+
+    .launch{
+        width:100%;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="grid"></div>
+
+
+<!-- HEADER -->
+
+<header>
+
+    <div class="logo">
+        NO.S <span>×</span>
+    </div>
+
+    <button
+    class="back"
+    onclick="goDashboard()">
+
+        ← DASHBOARD
+
+    </button>
+
+</header>
+
+
+<!-- MAIN -->
+
+<main class="container">
+
+
+    <div class="page-head">
+
+        <div>
+
+            <h1>
+                GAME <span>LIBRARY</span>
+            </h1>
+
+            <p>
+                Select a game to view its gaming profile.
+            </p>
+
+        </div>
+
+
+        <input
+        class="search"
+        id="search"
+        type="text"
+        placeholder="Search games..."
+        oninput="searchGames()">
+
+    </div>
+
+
+    <!-- GAME GRID -->
+
+    <div
+    class="game-grid"
+    id="gameGrid">
+
+
+        <!-- FREE FIRE -->
+
+        <div
+        class="game-card"
+        data-name="free fire"
+        onclick="selectGame(
+        'FREE FIRE',
+        '🔥',
+        '120 FPS',
+        'ULTRA',
+        'TURBO',
+        'LOW'
+        )">
+
+            <div class="game-art">
+                🔥
+            </div>
+
+            <h3>
+                FREE FIRE
+            </h3>
+
+            <p>
+                Battle Royale
+            </p>
+
+            <span class="status">
+                READY
+            </span>
+
+        </div>
+
+
+        <!-- PUBG -->
+
+        <div
+        class="game-card"
+        data-name="pubg mobile"
+        onclick="selectGame(
+        'PUBG MOBILE',
+        '🎯',
+        '90 FPS',
+        'HDR',
+        'HIGH',
+        'LOW'
+        )">
+
+            <div class="game-art">
+                🎯
+            </div>
+
+            <h3>
+                PUBG MOBILE
+            </h3>
+
+            <p>
+                Battle Royale
+            </p>
+
+            <span class="status">
+                READY
+            </span>
+
+        </div>
+
+
+        <!-- BGMI -->
+
+        <div
+        class="game-card"
+        data-name="bgmi"
+        onclick="selectGame(
+        'BGMI',
+        '⚔',
+        '90 FPS',
+        'HDR',
+        'HIGH',
+        'LOW'
+        )">
+
+            <div class="game-art">
+                ⚔
+            </div>
+
+            <h3>
+                BGMI
+            </h3>
+
+            <p>
+                Battle Royale
+            </p>
+
+            <span class="status">
+                READY
+            </span>
+
+        </div>
+
+
+        <!-- COD -->
+
+        <div
+        class="game-card"
+        data-name="call of duty"
+        onclick="selectGame(
+        'CALL OF DUTY',
+        '☠',
+        '120 FPS',
+        'VERY HIGH',
+        'TURBO',
+        'LOW'
+        )">
+
+            <div class="game-art">
+                ☠
+            </div>
+
+            <h3>
+                CALL OF DUTY
+            </h3>
+
+            <p>
+                Multiplayer
+            </p>
+
+            <span class="status">
+                READY
+            </span>
+
+        </div>
+
+
+        <!-- EFOOTBALL -->
+
+        <div
+        class="game-card"
+        data-name="efootball"
+        onclick="selectGame(
+        'EFOOTBALL',
+        '⚽',
+        '60 FPS',
+        'HIGH',
+        'BALANCED',
+        'LOW'
+        )">
+
+            <div class="game-art">
+                ⚽
+            </div>
+
+            <h3>
+                EFOOTBALL
+            </h3>
+
+            <p>
+                Sports
+            </p>
+
+            <span class="status">
+                READY
+            </span>
+
+        </div>
+
+
+        <!-- ROBLOX -->
+
+        <div
+        class="game-card"
+        data-name="roblox"
+        onclick="selectGame(
+        'ROBLOX',
+        '◇',
+        '120 FPS',
+        'HIGH',
+        'TURBO',
+        'LOW'
+        )">
+
+            <div class="game-art">
+                ◇
+            </div>
+
+            <h3>
+                ROBLOX
+            </h3>
+
+            <p>
+                Adventure
+            </p>
+
+            <span class="status">
+                READY
+            </span>
+
+        </div>
+
+
+        <!-- MINECRAFT -->
+
+        <div
+        class="game-card"
+        data-name="minecraft"
+        onclick="selectGame(
+        'MINECRAFT',
+        '⬛',
+        '120 FPS',
+        'HIGH',
+        'TURBO',
+        'LOW'
+        )">
+
+            <div class="game-art">
+                ⬛
+            </div>
+
+            <h3>
+                MINECRAFT
+            </h3>
+
+            <p>
+                Sandbox
+            </p>
+
+            <span class="status">
+                READY
+            </span>
+
+        </div>
+
+
+        <!-- VALORANT -->
+
+        <div
+        class="game-card"
+        data-name="valorant"
+        onclick="selectGame(
+        'VALORANT',
+        '◆',
+        '144 FPS',
+        'HIGH',
+        'TURBO',
+        'LOW'
+        )">
+
+            <div class="game-art">
+                ◆
+            </div>
+
+            <h3>
+                VALORANT
+            </h3>
+
+            <p>
+                Tactical Shooter
+            </p>
+
+            <span class="status">
+                READY
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+    <div
+    class="no-result"
+    id="noResult">
+
+        NO GAME FOUND
+
+    </div>
+
+
+    <!-- SELECTED GAME PROFILE -->
+
+    <section
+    class="profile"
+    id="profile">
+
+
+        <div class="profile-top">
+
+
+            <div class="profile-title">
+
+                <div
+                class="profile-icon"
+                id="profileIcon">
+
+                    🔥
+
+                </div>
+
+
+                <div>
+
+                    <h2
+                    id="profileName">
+
+                        FREE FIRE
+
+                    </h2>
+
+                    <p>
+                        CUSTOM GAMING PROFILE
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+            class="launch"
+            onclick="launchGame()">
+
+                ▶ LAUNCH PROFILE
+
+            </button>
+
+
+        </div>
+
+
+        <div class="options">
+
+
+            <div class="option">
+
+                <label>
+                    FPS TARGET
+                </label>
+
+                <strong id="fps">
+                    120 FPS
+                </strong>
+
+            </div>
+
+
+            <div class="option">
+
+                <label>
+                    GRAPHICS
+                </label>
+
+                <strong id="graphics">
+                    ULTRA
+                </strong>
+
+            </div>
+
+
+            <div class="option">
+
+                <label>
+                    PERFORMANCE
+                </label>
+
+                <strong id="performance">
+                    TURBO
+                </strong>
+
+            </div>
+
+
+            <div class="option">
+
+                <label>
+                    NETWORK
+                </label>
+
+                <strong id="network">
+                    LOW
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+<!-- TOAST -->
+
+<div
+class="toast"
+id="toast">
+
+    Game selected
+
+</div>
+
+
+<script>
+
+/* =========================
+   SELECT GAME
+========================= */
+
+function selectGame(
+    name,
+    icon,
+    fps,
+    graphics,
+    performance,
+    network
+){
+
+    document
+    .querySelectorAll(".game-card")
+    .forEach(function(card){
+
+        card.classList.remove("selected");
+
+    });
+
+
+    event.currentTarget
+    .classList.add("selected");
+
+
+    document
+    .getElementById("profile")
+    .classList.add("show");
+
+
+    document
+    .getElementById("profileName")
+    .textContent=name;
+
+
+    document
+    .getElementById("profileIcon")
+    .textContent=icon;
+
+
+    document
+    .getElementById("fps")
+    .textContent=fps;
+
+
+    document
+    .getElementById("graphics")
+    .textContent=graphics;
+
+
+    document
+    .getElementById("performance")
+    .textContent=performance;
+
+
+    document
+    .getElementById("network")
+    .textContent=network;
+
+
+    document
+    .getElementById("profile")
+    .scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+    });
+
+
+    showToast(name + " selected");
+
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+function searchGames(){
+
+    const value =
+    document
+    .getElementById("search")
+    .value
+    .toLowerCase()
+    .trim();
+
+
+    const cards =
+    document.querySelectorAll(".game-card");
+
+    let found=0;
+
+
+    cards.forEach(function(card){
+
+        const name =
+        card.dataset.name;
+
+
+        if(name.includes(value)){
+
+            card.style.display="block";
+
+            found++;
+
+        }else{
+
+            card.style.display="none";
+
+        }
+
+    });
+
+
+    document
+    .getElementById("noResult")
+    .style.display =
+    found === 0 ? "block" : "none";
+
+}
+
+
+/* =========================
+   LAUNCH
+========================= */
+
+function launchGame(){
+
+    const name =
+    document
+    .getElementById("profileName")
+    .textContent;
+
+    showToast(
+        name +
+        " gaming profile activated"
+    );
+
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function goDashboard(){
+
+    window.location.href =
+    "dashboard.html";
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+let toastTimer;
+
+function showToast(message){
+
+    const toast =
+    document.getElementById("toast");
+
+    toast.textContent=message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer=setTimeout(function(){
+
+        toast.classList.remove("show");
+
+    },2000);
+
+}
+
+</script>
+
+
+</body>
+                  </html>
