@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NO.S X | Gaming Home</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#050505;
+    color:#fff;
+    min-height:100vh;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    background:
+        radial-gradient(circle at 15% 15%,rgba(255,0,0,.14),transparent 30%),
+        radial-gradient(circle at 85% 80%,rgba(255,0,0,.10),transparent 30%);
+}
+
+.topbar{
+    height:72px;
+    padding:0 32px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#090909;
+    border-bottom:1px solid #252525;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.logo span{
+    color:#ff2020;
+}
+
+.user{
+    color:#aaa;
+    font-size:13px;
+}
+
+.container{
+    max-width:1250px;
+    margin:auto;
+    padding:35px;
+}
+
+.hero{
+    min-height:280px;
+    border:1px solid #292929;
+    border-radius:18px;
+    padding:40px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:
+        linear-gradient(120deg,#130505,#090909 60%,#160404);
+    overflow:hidden;
+    position:relative;
+}
+
+.hero::after{
+    content:"NO.S ×";
+    position:absolute;
+    right:-30px;
+    bottom:-45px;
+    font-size:150px;
+    font-weight:900;
+    color:rgba(255,0,0,.035);
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+}
+
+.badge{
+    display:inline-block;
+    color:#ff3030;
+    border:1px solid #5b1111;
+    background:#170707;
+    padding:7px 12px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:bold;
+    letter-spacing:1px;
+    margin-bottom:15px;
+}
+
+.hero h1{
+    font-size:44px;
+    line-height:1.05;
+    margin-bottom:12px;
+}
+
+.hero h1 span{
+    color:#ff2020;
+}
+
+.hero p{
+    color:#888;
+    max-width:550px;
+    line-height:1.6;
+    font-size:14px;
+}
+
+.hero-buttons{
+    margin-top:22px;
+    display:flex;
+    gap:12px;
+}
+
+.btn{
+    padding:13px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    border:none;
+}
+
+.primary{
+    background:#ff2020;
+    color:#fff;
+}
+
+.secondary{
+    background:#151515;
+    color:#aaa;
+    border:1px solid #333;
+}
+
+.primary:hover{
+    background:#ff3535;
+}
+
+.secondary:hover{
+    color:#fff;
+    border-color:#ff2020;
+}
+
+.hero-logo{
+    width:190px;
+    height:190px;
+    border-radius:50%;
+    border:2px solid #481010;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:42px;
+    font-weight:900;
+    color:#ff2020;
+    box-shadow:
+        0 0 35px rgba(255,0,0,.18),
+        inset 0 0 30px rgba(255,0,0,.08);
+}
+
+.section{
+    margin-top:28px;
+}
+
+.section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.section-title h2{
+    font-size:20px;
+}
+
+.section-title span{
+    color:#666;
+    font-size:11px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.card{
+    background:#0d0d0d;
+    border:1px solid #292929;
+    border-radius:13px;
+    padding:20px;
+    transition:.25s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+    border-color:#ff2020;
+}
+
+.icon{
+    width:45px;
+    height:45px;
+    border-radius:10px;
+    background:#190606;
+    color:#ff3030;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    margin-bottom:15px;
+}
+
+.card h3{
+    font-size:15px;
+    margin-bottom:7px;
+}
+
+.card p{
+    color:#777;
+    font-size:11px;
+    line-height:1.5;
+}
+
+.status{
+    margin-top:15px;
+    color:#ff3030;
+    font-size:10px;
+    font-weight:bold;
+}
+
+.quick{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.quick-card{
+    padding:23px;
+    border:1px solid #292929;
+    background:#0b0b0b;
+    border-radius:13px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.quick-card:hover{
+    border-color:#ff2020;
+    background:#110606;
+}
+
+.quick-card h3{
+    font-size:15px;
+    margin-bottom:7px;
+}
+
+.quick-card p{
+    color:#777;
+    font-size:11px;
+}
+
+.footer{
+    text-align:center;
+    color:#555;
+    font-size:11px;
+    padding:35px 0 20px;
+}
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:#111;
+    border:1px solid #ff2020;
+    padding:14px 20px;
+    border-radius:8px;
+    font-size:13px;
+    opacity:0;
+    transform:translateY(80px);
+    transition:.3s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+@media(max-width:900px){
+
+    .cards{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .quick{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .hero-logo{
+        width:140px;
+        height:140px;
+        font-size:30px;
+    }
+}
+
+@media(max-width:650px){
+
+    .topbar{
+        padding:0 18px;
+    }
+
+    .container{
+        padding:22px 16px;
+    }
+
+    .hero{
+        padding:28px;
+    }
+
+    .hero h1{
+        font-size:32px;
+    }
+
+    .hero-logo{
+        display:none;
+    }
+
+    .hero-buttons{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+    }
+
+    .cards,
+    .quick{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="logo">
+        NO.S <span>×</span>
+    </div>
+
+    <div class="user">
+        USER: <b>be.like_sahil</b>
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="badge">
+                GAMING CONTROL CENTER
+            </div>
+
+            <h1>
+                WELCOME TO<br>
+                <span>NO.S X</span>
+            </h1>
+
+            <p>
+                Your professional gaming control interface for
+                performance profiles, FPS settings, graphics,
+                controls and network monitoring.
+            </p>
+
+            <div class="hero-buttons">
+
+                <button
+                    class="btn primary"
+                    onclick="window.location.href='games.html'"
+                >
+                    GAME LIBRARY
+                </button>
+
+                <button
+                    class="btn secondary"
+                    onclick="window.location.href='performance.html'"
+                >
+                    OPTIMIZATION CENTER
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-logo">
+            NO.S
+        </div>
+
+    </section>
+
+
+    <!-- FEATURES -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <h2>Gaming Modules</h2>
+
+            <span>NO.S SYSTEM</span>
+
+        </div>
+
+
+        <div class="cards">
+
+            <div class="card"
+                 onclick="window.location.href='fps.html'">
+
+                <div class="icon">⚡</div>
+
+                <h3>FPS BOOST</h3>
+
+                <p>
+                    Configure FPS targets and
+                    performance profiles.
+                </p>
+
+                <div class="status">
+                    ● READY
+                </div>
+
+            </div>
+
+
+            <div class="card"
+                 onclick="window.location.href='graphics.html'">
+
+                <div class="icon">◆</div>
+
+                <h3>GRAPHICS</h3>
+
+                <p>
+                    Configure resolution,
+                    textures and visual quality.
+                </p>
+
+                <div class="status">
+                    ● READY
+                </div>
+
+            </div>
+
+
+            <div class="card"
+                 onclick="window.location.href='controls.html'">
+
+                <div class="icon">⌨</div>
+
+                <h3>CONTROLS</h3>
+
+                <p>
+                    Manage key mapping and
+                    sensitivity profiles.
+                </p>
+
+                <div class="status">
+                    ● READY
+                </div>
+
+            </div>
+
+
+            <div class="card"
+                 onclick="window.location.href='network.html'">
+
+                <div class="icon">◉</div>
+
+                <h3>NETWORK</h3>
+
+                <p>
+                    View network profile,
+                    latency and diagnostics.
+                </p>
+
+                <div class="status">
+                    ● READY
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- QUICK ACCESS -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <h2>Quick Access</h2>
+
+            <span>CONTROL PANEL</span>
+
+        </div>
+
+
+        <div class="quick">
+
+            <div class="quick-card"
+                 onclick="window.location.href='games.html'">
+
+                <h3>▣ Game Library</h3>
+
+                <p>
+                    Browse supported game profiles.
+                </p>
+
+            </div>
+
+
+            <div class="quick-card"
+                 onclick="window.location.href='performance.html'">
+
+                <h3>⚡ Performance</h3>
+
+                <p>
+                    Open the optimization center.
+                </p>
+
+            </div>
+
+
+            <div class="quick-card"
+                 onclick="window.location.href='settings.html'">
+
+                <h3>⚙ Settings</h3>
+
+                <p>
+                    Manage interface and system preferences.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <footer class="footer">
+        NO.S × Gaming Panel • Gaming Interface
+    </footer>
+
+</main>
+
+
+<div class="toast" id="toast">
+    Module opened
+</div>
+
+
+<script>
+
+function showToast(message){
+
+    const toast=document.getElementById("toast");
+
+    toast.textContent=message;
+
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },2200);
+
+}
+
+</script>
+
+</body>
+  </html>
