@@ -1,1 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>No.sメ | Gaming Mode</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at 50% 20%, #123b68 0%, transparent 35%),
+                linear-gradient(135deg, #03070d, #07111d 50%, #02050a);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Background grid */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 174, 255, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 174, 255, 0.035) 1px, transparent 1px);
+            background-size: 45px 45px;
+            pointer-events: none;
+        }
+
+        /* Glow effects */
+        .glow {
+            position: fixed;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: rgba(0, 153, 255, 0.12);
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .glow.one {
+            top: -100px;
+            left: -80px;
+        }
+
+        .glow.two {
+            bottom: -120px;
+            right: -80px;
+        }
+
+        .login-container {
+            width: min(92%, 460px);
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-box {
+            background: rgba(7, 15, 25, 0.90);
+            border: 1px solid rgba(0, 174, 255, 0.35);
+            border-radius: 18px;
+            padding: 42px 38px;
+            box-shadow:
+                0 0 35px rgba(0, 132, 255, 0.12),
+                inset 0 0 25px rgba(0, 132, 255, 0.025);
+            backdrop-filter: blur(15px);
+        }
+
+        /* Logo */
+        .logo {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .logo h1 {
+            font-size: 46px;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-shadow:
+                0 0 10px rgba(0, 174, 255, 0.7),
+                0 0 25px rgba(0, 174, 255, 0.3);
+        }
+
+        .logo p {
+            margin-top: 7px;
+            color: #63cfff;
+            font-size: 12px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .line {
+            height: 1px;
+            width: 100%;
+            margin: 28px 0;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(0, 174, 255, 0.7),
+                transparent
+            );
+        }
+
+        .welcome {
+            text-align: center;
+            margin-bottom: 26px;
+        }
+
+        .welcome h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .welcome p {
+            margin-top: 7px;
+            font-size: 12px;
+            color: #8293a5;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: #9db0c2;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #35bfff;
+            font-size: 15px;
+        }
+
+        input {
+            width: 100%;
+            height: 52px;
+            border-radius: 10px;
+            border: 1px solid #203548;
+            outline: none;
+            background: #050c14;
+            color: #ffffff;
+            padding: 0 15px 0 43px;
+            font-size: 14px;
+            transition: 0.25s ease;
+        }
+
+        input::placeholder {
+            color: #506273;
+        }
+
+        input:focus {
+            border-color: #00aaff;
+            box-shadow: 0 0 0 3px rgba(0, 170, 255, 0.08);
+        }
+
+        .login-btn {
+            width: 100%;
+            height: 54px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #0077ff, #00b7ff);
+            box-shadow: 0 8px 25px rgba(0, 136, 255, 0.22);
+            transition: 0.25s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 170, 255, 0.35);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .error {
+            min-height: 18px;
+            margin-top: 14px;
+            text-align: center;
+            color: #ff6475;
+            font-size: 12px;
+        }
+
+        .security {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+            margin-top: 22px;
+            color: #64778a;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background: #00d084;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00d084;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 22px;
+            color: #425466;
+            font-size: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .login-box {
+                padding: 34px 24px;
+            }
+
+            .logo h1 {
+                font-size: 39px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+
+    <main class="login-container">
+
+        <section class="login-box">
+
+            <div class="logo">
+                <h1>No.sメ</h1>
+                <p>Gaming Mode</p>
+            </div>
+
+            <div class="line"></div>
+
+            <div class="welcome">
+                <h2>Welcome Back</h2>
+                <p>Enter your credentials to access the gaming dashboard</p>
+            </div>
+
+            <form id="loginForm">
+
+                <div class="input-group">
+                    <label for="username">Username</label>
+
+                    <div class="input-wrapper">
+                        <span class="input-icon">◉</span>
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Enter username"
+                            autocomplete="username"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+
+                    <div class="input-wrapper">
+                        <span class="input-icon">◆</span>
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter password"
+                            autocomplete="current-password"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    ENTER GAMING MODE
+                </button>
+
+                <div id="errorMessage" class="error"></div>
+
+            </form>
+
+            <div class="security">
+                <span class="status-dot"></span>
+                SYSTEM READY
+            </div>
+
+            <div class="footer">
+                No.sメ Gaming Environment
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        const username = document.getElementById("username");
+        const password = document.getElementById("password");
+        const errorMessage = document.getElementById("errorMessage");
+
+        loginForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const enteredUsername = username.value.trim();
+            const enteredPassword = password.value;
+
+            const correctUsername = "be.like_sahil";
+            const correctPassword = "9595";
+
+            if (
+                enteredUsername === correctUsername &&
+                enteredPassword === correctPassword
+            ) {
+                errorMessage.style.color = "#00d084";
+                errorMessage.textContent = "Access granted...";
+
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 500);
+
+            } else {
+                errorMessage.style.color = "#ff6475";
+                errorMessage.textContent =
+                    "Invalid username or password.";
+            }
+        });
+    </script>
+
+</body>
+</html>
