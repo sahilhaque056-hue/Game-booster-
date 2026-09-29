@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NO.S X | Controls</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    color:#fff;
+    background:
+        radial-gradient(circle at 85% 10%,rgba(255,0,50,.15),transparent 30%),
+        radial-gradient(circle at 10% 90%,rgba(255,0,50,.08),transparent 35%),
+        #050505;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.15;
+    background-image:
+        linear-gradient(rgba(255,0,50,.08) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,0,50,.08) 1px,transparent 1px);
+    background-size:45px 45px;
+}
+
+.header{
+    height:75px;
+    padding:0 35px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid #252525;
+    background:rgba(5,5,5,.93);
+    position:relative;
+    z-index:2;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.logo span{
+    color:#ff1744;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.status{
+    padding:8px 12px;
+    border:1px solid #ff1744;
+    color:#ff1744;
+    border-radius:5px;
+    font-size:10px;
+    font-weight:bold;
+}
+
+.back{
+    padding:10px 15px;
+    background:#111;
+    color:#fff;
+    border:1px solid #333;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.back:hover{
+    border-color:#ff1744;
+    color:#ff1744;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:35px 22px 60px;
+    position:relative;
+    z-index:1;
+}
+
+.heading{
+    margin-bottom:28px;
+}
+
+.heading h1{
+    font-size:34px;
+}
+
+.heading h1 span{
+    color:#ff1744;
+}
+
+.heading p{
+    color:#666;
+    font-size:13px;
+    margin-top:8px;
+}
+
+/* PROFILE */
+
+.profile{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px;
+    background:#0c0c0c;
+    border:1px solid #292929;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+.game{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.game-icon{
+    width:55px;
+    height:55px;
+    display:grid;
+    place-items:center;
+    background:#151515;
+    border:1px solid #ff1744;
+    border-radius:10px;
+    font-size:25px;
+}
+
+.game h2{
+    font-size:18px;
+}
+
+.game p{
+    color:#666;
+    font-size:10px;
+    margin-top:5px;
+}
+
+.ready{
+    color:#ff1744;
+    border:1px solid #ff1744;
+    padding:8px 12px;
+    font-size:10px;
+    border-radius:5px;
+    font-weight:bold;
+}
+
+/* GRID */
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.card{
+    background:#0b0b0b;
+    border:1px solid #272727;
+    border-radius:12px;
+    padding:22px;
+}
+
+.card:hover{
+    border-color:#3b3b3b;
+}
+
+.card h3{
+    font-size:14px;
+    margin-bottom:5px;
+}
+
+.desc{
+    color:#666;
+    font-size:10px;
+    margin-bottom:20px;
+}
+
+/* KEY MAP */
+
+.key-list{
+    display:flex;
+    flex-direction:column;
+}
+
+.key-row{
+    display:grid;
+    grid-template-columns:1fr 70px 30px;
+    align-items:center;
+    gap:12px;
+    padding:13px 0;
+    border-bottom:1px solid #1d1d1d;
+}
+
+.key-row:last-child{
+    border-bottom:0;
+}
+
+.action{
+    color:#aaa;
+    font-size:11px;
+}
+
+.key{
+    background:#151515;
+    border:1px solid #444;
+    border-radius:5px;
+    padding:7px;
+    text-align:center;
+    color:#ff1744;
+    font-size:10px;
+    font-weight:bold;
+}
+
+.edit{
+    color:#555;
+    cursor:pointer;
+    text-align:center;
+}
+
+.edit:hover{
+    color:#ff1744;
+}
+
+/* MOUSE */
+
+.slider{
+    margin-bottom:20px;
+}
+
+.slider-head{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:9px;
+    font-size:11px;
+    color:#aaa;
+}
+
+.value{
+    color:#ff1744;
+    font-weight:bold;
+}
+
+input[type="range"]{
+    width:100%;
+    accent-color:#ff1744;
+}
+
+/* LAYOUT */
+
+.layouts{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.layout{
+    height:75px;
+    background:#111;
+    border:1px solid #292929;
+    border-radius:7px;
+    display:grid;
+    place-items:center;
+    color:#777;
+    cursor:pointer;
+    font-size:10px;
+}
+
+.layout:hover{
+    border-color:#ff1744;
+    color:#fff;
+}
+
+.layout.active{
+    border-color:#ff1744;
+    color:#ff1744;
+    box-shadow:0 0 18px rgba(255,0,50,.1);
+}
+
+/* CROSSHAIR */
+
+.crosshair-preview{
+    height:120px;
+    background:
+        linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px),
+        #080808;
+    background-size:20px 20px;
+    border:1px solid #222;
+    border-radius:8px;
+    display:grid;
+    place-items:center;
+    margin-bottom:15px;
+}
+
+.crosshair{
+    width:35px;
+    height:35px;
+    position:relative;
+}
+
+.crosshair::before,
+.crosshair::after{
+    content:"";
+    position:absolute;
+    background:#ff1744;
+}
+
+.crosshair::before{
+    width:2px;
+    height:35px;
+    left:16px;
+    top:0;
+}
+
+.crosshair::after{
+    width:35px;
+    height:2px;
+    left:0;
+    top:16px;
+}
+
+.crosshair-dot{
+    position:absolute;
+    width:5px;
+    height:5px;
+    background:#ff1744;
+    border-radius:50%;
+    top:15px;
+    left:15px;
+}
+
+/* SELECT */
+
+.select{
+    width:100%;
+    padding:11px;
+    background:#111;
+    color:#fff;
+    border:1px solid #333;
+    border-radius:6px;
+    outline:none;
+}
+
+.select:focus{
+    border-color:#ff1744;
+}
+
+/* TOGGLES */
+
+.setting{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:15px 0;
+    border-bottom:1px solid #1d1d1d;
+}
+
+.setting:last-child{
+    border-bottom:0;
+}
+
+.setting strong{
+    font-size:11px;
+}
+
+.setting small{
+    display:block;
+    color:#555;
+    font-size:9px;
+    margin-top:5px;
+}
+
+.switch{
+    width:44px;
+    height:23px;
+    background:#222;
+    border-radius:20px;
+    position:relative;
+    cursor:pointer;
+}
+
+.switch::after{
+    content:"";
+    width:17px;
+    height:17px;
+    position:absolute;
+    top:3px;
+    left:3px;
+    background:#777;
+    border-radius:50%;
+    transition:.2s;
+}
+
+.switch.active{
+    background:#ff1744;
+}
+
+.switch.active::after{
+    left:24px;
+    background:#fff;
+}
+
+/* ACTIONS */
+
+.actions{
+    margin-top:22px;
+    display:flex;
+    gap:10px;
+}
+
+.apply{
+    flex:1;
+    padding:16px;
+    border:0;
+    border-radius:7px;
+    background:#ff1744;
+    color:#fff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.apply:hover{
+    background:#ff3158;
+}
+
+.reset{
+    padding:16px 25px;
+    border:1px solid #333;
+    background:#111;
+    color:#aaa;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+.reset:hover{
+    color:#fff;
+    border-color:#ff1744;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    padding:14px 18px;
+    background:#111;
+    border:1px solid #ff1744;
+    border-radius:7px;
+    font-size:11px;
+    opacity:0;
+    transform:translateY(100px);
+    transition:.3s;
+    z-index:10;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* FOOTER */
+
+.footer{
+    text-align:center;
+    color:#444;
+    font-size:10px;
+    margin-top:35px;
+}
+
+/* MOBILE */
+
+@media(max-width:780px){
+
+    .header{
+        padding:0 15px;
+    }
+
+    .status{
+        display:none;
+    }
+
+    .container{
+        padding:25px 15px 50px;
+    }
+
+    .heading h1{
+        font-size:27px;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .ready{
+        display:none;
+    }
+
+    .layouts{
+        grid-template-columns:1fr;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .reset{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="logo">
+        NO.S <span>×</span>
+    </div>
+
+    <div class="header-right">
+
+        <div class="status">
+            CONTROL CENTER
+        </div>
+
+        <button class="back"
+        onclick="window.location.href='dashboard.html'">
+            ← DASHBOARD
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <div class="heading">
+
+        <h1>
+            CONTROL <span>CENTER</span>
+        </h1>
+
+        <p>
+            Configure your gaming control profile.
+        </p>
+
+    </div>
+
+
+    <!-- GAME PROFILE -->
+
+    <section class="profile">
+
+        <div class="game">
+
+            <div class="game-icon">
+                🎮
+            </div>
+
+            <div>
+                <h2>NO.S X Emulator Profile</h2>
+                <p>Gaming control configuration</p>
+            </div>
+
+        </div>
+
+        <div class="ready">
+            PROFILE READY
+        </div>
+
+    </section>
+
+
+    <section class="grid">
+
+
+        <!-- KEY MAPPING -->
+
+        <div class="card">
+
+            <h3>KEY MAPPING</h3>
+
+            <p class="desc">
+                Current control layout.
+            </p>
+
+            <div class="key-list">
+
+                <div class="key-row">
+
+                    <div class="action">
+                        Move Forward
+                    </div>
+
+                    <div class="key">
+                        W
+                    </div>
+
+                    <div class="edit"
+                    onclick="editKey(this)">
+                        ✎
+                    </div>
+
+                </div>
+
+
+                <div class="key-row">
+
+                    <div class="action">
+                        Move Left
+                    </div>
+
+                    <div class="key">
+                        A
+                    </div>
+
+                    <div class="edit"
+                    onclick="editKey(this)">
+                        ✎
+                    </div>
+
+                </div>
+
+
+                <div class="key-row">
+
+                    <div class="action">
+                        Move Back
+                    </div>
+
+                    <div class="key">
+                        S
+                    </div>
+
+                    <div class="edit"
+                    onclick="editKey(this)">
+                        ✎
+                    </div>
+
+                </div>
+
+
+                <div class="key-row">
+
+                    <div class="action">
+                        Move Right
+                    </div>
+
+                    <div class="key">
+                        D
+                    </div>
+
+                    <div class="edit"
+                    onclick="editKey(this)">
+                        ✎
+                    </div>
+
+                </div>
+
+
+                <div class="key-row">
+
+                    <div class="action">
+                        Jump
+                    </div>
+
+                    <div class="key">
+                        SPACE
+                    </div>
+
+                    <div class="edit"
+                    onclick="editKey(this)">
+                        ✎
+                    </div>
+
+                </div>
+
+
+                <div class="key-row">
+
+                    <div class="action">
+                        Crouch
+                    </div>
+
+                    <div class="key">
+                        C
+                    </div>
+
+                    <div class="edit"
+                    onclick="editKey(this)">
+                        ✎
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MOUSE -->
+
+        <div class="card">
+
+            <h3>MOUSE CONTROL</h3>
+
+            <p class="desc">
+                Configure visual mouse sensitivity.
+            </p>
+
+
+            <div class="slider">
+
+                <div class="slider-head">
+                    <span>General Sensitivity</span>
+                    <span class="value"
+                    id="general">75</span>
+                </div>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="75"
+                    oninput="updateValue(this,'general')"
+                >
+
+            </div>
+
+
+            <div class="slider">
+
+                <div class="slider-head">
+                    <span>ADS Sensitivity</span>
+                    <span class="value"
+                    id="ads">65</span>
+                </div>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="65"
+                    oninput="updateValue(this,'ads')"
+                >
+
+            </div>
+
+
+            <div class="slider">
+
+                <div class="slider-head">
+                    <span>Scope Sensitivity</span>
+                    <span class="value"
+                    id="scope">55</span>
+                </div>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="55"
+                    oninput="updateValue(this,'scope')"
+                >
+
+            </div>
+
+
+            <div class="slider">
+
+                <div class="slider-head">
+                    <span>Mouse Acceleration</span>
+                    <span class="value"
+                    id="acceleration">20</span>
+                </div>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="20"
+                    oninput="updateValue(this,'acceleration')"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- LAYOUT -->
+
+        <div class="card">
+
+            <h3>CONTROL LAYOUT</h3>
+
+            <p class="desc">
+                Choose your preferred interface layout.
+            </p>
+
+            <div class="layouts">
+
+                <div class="layout active"
+                onclick="selectLayout(this)">
+                    CLASSIC
+                </div>
+
+                <div class="layout"
+                onclick="selectLayout(this)">
+                    ADVANCED
+                </div>
+
+                <div class="layout"
+                onclick="selectLayout(this)">
+                    CUSTOM
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CROSSHAIR -->
+
+        <div class="card">
+
+            <h3>CROSSHAIR</h3>
+
+            <p class="desc">
+                Preview your crosshair profile.
+            </p>
+
+            <div class="crosshair-preview">
+
+                <div class="crosshair">
+
+                    <div class="crosshair-dot"></div>
+
+                </div>
+
+            </div>
+
+            <select class="select"
+            onchange="showToast('Crosshair profile changed')">
+
+                <option>Classic Red</option>
+                <option>Minimal Dot</option>
+                <option>Cross</option>
+                <option>Precision</option>
+
+            </select>
+
+        </div>
+
+
+        <!-- EXTRA CONTROLS -->
+
+        <div class="card">
+
+            <h3>EXTRA CONTROLS</h3>
+
+            <p class="desc">
+                Additional control preferences.
+            </p>
+
+
+            <div class="setting">
+
+                <div>
+                    <strong>Smart Key Overlay</strong>
+                    <small>
+                        Show control indicators
+                    </small>
+                </div>
+
+                <div class="switch active"
+                onclick="toggle(this)"></div>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div>
+                    <strong>Quick Fire</strong>
+                    <small>
+                        Enable interface shortcut
+                    </small>
+                </div>
+
+                <div class="switch"
+                onclick="toggle(this)"></div>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div>
+                    <strong>Auto Profile</strong>
+                    <small>
+                        Select profile automatically
+                    </small>
+                </div>
+
+                <div class="switch active"
+                onclick="toggle(this)"></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROFILE INFO -->
+
+        <div class="card">
+
+            <h3>CONTROL PROFILE</h3>
+
+            <p class="desc">
+                Current configuration summary.
+            </p>
+
+            <div class="key-row">
+
+                <div class="action">
+                    Profile
+                </div>
+
+                <div class="key">
+                    GAMING
+                </div>
+
+                <div></div>
+
+            </div>
+
+            <div class="key-row">
+
+                <div class="action">
+                    Layout
+                </div>
+
+                <div class="key">
+                    CLASSIC
+                </div>
+
+                <div></div>
+
+            </div>
+
+            <div class="key-row">
+
+                <div class="action">
+                    Status
+                </div>
+
+                <div class="key">
+                    READY
+                </div>
+
+                <div></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ACTIONS -->
+
+    <div class="actions">
+
+        <button class="apply"
+        onclick="applyControls()">
+
+            ✓ APPLY CONTROL PROFILE
+
+        </button>
+
+        <button class="reset"
+        onclick="resetControls()">
+
+            RESET
+
+        </button>
+
+    </div>
+
+
+    <div class="footer">
+        NO.S × GAMING PANEL • CONTROL CENTER
+    </div>
+
+</main>
+
+
+<div class="toast" id="toast">
+    Control profile updated
+</div>
+
+
+<script>
+
+function updateValue(slider,id){
+
+    document.getElementById(id).innerText =
+        slider.value;
+
+}
+
+
+function selectLayout(element){
+
+    document.querySelectorAll(".layout")
+    .forEach(item=>{
+        item.classList.remove("active");
+    });
+
+    element.classList.add("active");
+
+    showToast(
+        element.innerText +
+        " layout selected"
+    );
+
+}
+
+
+function toggle(element){
+
+    element.classList.toggle("active");
+
+    showToast("Control setting updated");
+
+}
+
+
+function editKey(element){
+
+    const key =
+        element.parentElement.querySelector(".key");
+
+    const newKey =
+        prompt("Enter new key:",key.innerText);
+
+    if(newKey && newKey.trim() !== ""){
+
+        key.innerText =
+            newKey.trim().toUpperCase();
+
+        showToast("Key mapping updated");
+
+    }
+
+}
+
+
+function applyControls(){
+
+    showToast(
+        "Control profile applied successfully"
+    );
+
+}
+
+
+function resetControls(){
+
+    showToast("Control profile reset");
+
+    setTimeout(()=>{
+        location.reload();
+    },700);
+
+}
+
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.innerText=message;
+
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },2200);
+
+}
+
+</script>
+
+</body>
+              </html>
