@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NO.S X | Network Center</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    color:#fff;
+    background:
+        radial-gradient(circle at 85% 10%,rgba(255,0,50,.15),transparent 30%),
+        radial-gradient(circle at 10% 90%,rgba(255,0,50,.08),transparent 35%),
+        #050505;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.14;
+    background-image:
+        linear-gradient(rgba(255,0,50,.08) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,0,50,.08) 1px,transparent 1px);
+    background-size:45px 45px;
+}
+
+.header{
+    height:75px;
+    padding:0 35px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid #252525;
+    background:rgba(5,5,5,.93);
+    position:relative;
+    z-index:2;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.logo span{
+    color:#ff1744;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.status{
+    padding:8px 12px;
+    border:1px solid #ff1744;
+    color:#ff1744;
+    border-radius:5px;
+    font-size:10px;
+    font-weight:bold;
+}
+
+.back{
+    padding:10px 15px;
+    background:#111;
+    color:#fff;
+    border:1px solid #333;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.back:hover{
+    border-color:#ff1744;
+    color:#ff1744;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:35px 22px 60px;
+    position:relative;
+    z-index:1;
+}
+
+.heading{
+    margin-bottom:28px;
+}
+
+.heading h1{
+    font-size:34px;
+}
+
+.heading h1 span{
+    color:#ff1744;
+}
+
+.heading p{
+    color:#666;
+    margin-top:8px;
+    font-size:13px;
+}
+
+/* CONNECTION */
+
+.connection{
+    padding:25px;
+    background:#0b0b0b;
+    border:1px solid #292929;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+.connection-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.connection-title{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.signal{
+    width:55px;
+    height:55px;
+    display:grid;
+    place-items:center;
+    border-radius:10px;
+    border:1px solid #ff1744;
+    background:#151515;
+    color:#ff1744;
+    font-size:24px;
+}
+
+.connection h2{
+    font-size:18px;
+}
+
+.connection p{
+    color:#666;
+    font-size:10px;
+    margin-top:5px;
+}
+
+.connected{
+    color:#ff1744;
+    border:1px solid #ff1744;
+    padding:8px 12px;
+    border-radius:5px;
+    font-size:10px;
+    font-weight:bold;
+}
+
+/* PING */
+
+.ping-area{
+    margin-top:25px;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:12px;
+}
+
+.metric{
+    padding:18px;
+    background:#111;
+    border:1px solid #252525;
+    border-radius:8px;
+}
+
+.metric span{
+    display:block;
+    color:#555;
+    font-size:9px;
+    margin-bottom:8px;
+}
+
+.metric strong{
+    font-size:23px;
+}
+
+.metric strong.good{
+    color:#ff1744;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.card{
+    padding:22px;
+    background:#0b0b0b;
+    border:1px solid #272727;
+    border-radius:12px;
+}
+
+.card h3{
+    font-size:14px;
+    margin-bottom:5px;
+}
+
+.desc{
+    color:#666;
+    font-size:10px;
+    margin-bottom:20px;
+}
+
+/* SERVER */
+
+.server-list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.server{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px;
+    background:#111;
+    border:1px solid #292929;
+    border-radius:7px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.server:hover{
+    border-color:#ff1744;
+}
+
+.server.active{
+    border-color:#ff1744;
+    box-shadow:0 0 15px rgba(255,0,50,.08);
+}
+
+.server-name{
+    font-size:11px;
+}
+
+.server-location{
+    color:#555;
+    font-size:9px;
+    margin-top:4px;
+}
+
+.server-ping{
+    color:#ff1744;
+    font-size:11px;
+    font-weight:bold;
+}
+
+/* PROFILE */
+
+.profile-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.profile-option{
+    padding:15px;
+    border:1px solid #292929;
+    background:#111;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+.profile-option strong{
+    font-size:11px;
+}
+
+.profile-option small{
+    display:block;
+    color:#555;
+    margin-top:5px;
+    font-size:9px;
+}
+
+.profile-option.active{
+    border-color:#ff1744;
+}
+
+.profile-option.active strong{
+    color:#ff1744;
+}
+
+/* GRAPH */
+
+.graph{
+    height:150px;
+    position:relative;
+    overflow:hidden;
+    background:
+        linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),
+        #080808;
+    background-size:25px 25px;
+    border:1px solid #222;
+    border-radius:8px;
+}
+
+.graph-line{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:42px;
+    height:2px;
+    background:#ff1744;
+    transform:rotate(-2deg);
+    box-shadow:0 0 10px rgba(255,0,50,.7);
+}
+
+.graph-line::before{
+    content:"";
+    position:absolute;
+    width:100%;
+    height:70px;
+    top:-35px;
+    left:0;
+    border-top:2px solid rgba(255,23,68,.25);
+    transform:skewY(5deg);
+}
+
+/* DIAGNOSTICS */
+
+.diagnostic{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 0;
+    border-bottom:1px solid #1d1d1d;
+}
+
+.diagnostic:last-child{
+    border-bottom:0;
+}
+
+.diagnostic span{
+    color:#777;
+    font-size:11px;
+}
+
+.value{
+    color:#ff1744;
+    font-size:11px;
+    font-weight:bold;
+}
+
+/* BUTTONS */
+
+.actions{
+    margin-top:22px;
+    display:flex;
+    gap:10px;
+}
+
+.test{
+    flex:1;
+    padding:16px;
+    background:#ff1744;
+    color:#fff;
+    border:0;
+    border-radius:7px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.test:hover{
+    background:#ff3158;
+}
+
+.reset{
+    padding:16px 25px;
+    background:#111;
+    color:#aaa;
+    border:1px solid #333;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+.reset:hover{
+    color:#fff;
+    border-color:#ff1744;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    padding:14px 18px;
+    background:#111;
+    border:1px solid #ff1744;
+    border-radius:7px;
+    font-size:11px;
+    transform:translateY(100px);
+    opacity:0;
+    transition:.3s;
+    z-index:10;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+/* FOOTER */
+
+.footer{
+    text-align:center;
+    color:#444;
+    font-size:10px;
+    margin-top:35px;
+}
+
+/* MOBILE */
+
+@media(max-width:780px){
+
+    .header{
+        padding:0 15px;
+    }
+
+    .status{
+        display:none;
+    }
+
+    .container{
+        padding:25px 15px 50px;
+    }
+
+    .heading h1{
+        font-size:27px;
+    }
+
+    .ping-area,
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .connected{
+        display:none;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .reset{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="logo">
+        NO.S <span>×</span>
+    </div>
+
+    <div class="header-right">
+
+        <div class="
