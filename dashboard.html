@@ -1,1 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>No.sメ | Gaming Control Center</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #03070d;
+            --panel: #07111d;
+            --panel2: #0a1725;
+            --border: rgba(0, 170, 255, .18);
+            --blue: #00aaff;
+            --blue2: #006eff;
+            --text: #f3f8ff;
+            --muted: #7890a5;
+            --green: #00d084;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 70% 0%, rgba(0, 120, 255, .13), transparent 30%),
+                linear-gradient(135deg, #02050a, #06101b 55%, #02050a);
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .35;
+            background-image:
+                linear-gradient(rgba(0,170,255,.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,170,255,.025) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* TOP BAR */
+
+        .topbar {
+            height: 70px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 28px;
+
+            background: rgba(3, 9, 16, .92);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(15px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-logo {
+            font-size: 27px;
+            font-weight: 800;
+            text-shadow: 0 0 18px rgba(0,170,255,.55);
+        }
+
+        .brand-info small {
+            display: block;
+            color: var(--blue);
+            font-size: 9px;
+            letter-spacing: 2px;
+            margin-top: 3px;
+        }
+
+        .system {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #8fa5b8;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .online {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 12px var(--green);
+        }
+
+        /* LAYOUT */
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 70px);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 230px;
+            flex-shrink: 0;
+            padding: 22px 14px;
+
+            background: rgba(4, 11, 19, .78);
+            border-right: 1px solid var(--border);
+        }
+
+        .menu-title {
+            padding: 8px 13px;
+            color: #4e6478;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            border: 1px solid transparent;
+            background: transparent;
+            color: #7f94a8;
+
+            padding: 13px 14px;
+            margin: 3px 0;
+
+            border-radius: 9px;
+            cursor: pointer;
+            text-align: left;
+
+            transition: .2s ease;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            color: #fff;
+            background: rgba(0, 145, 255, .09);
+            border-color: rgba(0, 170, 255, .18);
+        }
+
+        .nav-icon {
+            width: 22px;
+            text-align: center;
+            color: var(--blue);
+        }
+
+        .sidebar-bottom {
+            margin-top: 35px;
+            padding: 15px;
+            border: 1px solid rgba(0,170,255,.12);
+            border-radius: 10px;
+            background: rgba(0,130,255,.035);
+        }
+
+        .sidebar-bottom p {
+            font-size: 10px;
+            color: #6e8294;
+            line-height: 1.6;
+        }
+
+        .logout {
+            width: 100%;
+            margin-top: 12px;
+            padding: 9px;
+            border-radius: 7px;
+            border: 1px solid rgba(255,80,100,.2);
+            background: rgba(255,60,80,.04);
+            color: #ff7585;
+            cursor: pointer;
+        }
+
+        /* CONTENT */
+
+        .content {
+            flex: 1;
+            padding: 30px;
+            max-width: 1500px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fade .25s ease;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 26px;
+        }
+
+        .page-heading p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 7px;
+        }
+
+        /* CARDS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            padding: 19px;
+            background: rgba(7,17,29,.8);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .stat-label {
+            color: #657d92;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            margin-top: 9px;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .stat-value.blue {
+            color: #25b9ff;
+        }
+
+        .stat-value.green {
+            color: #00d084;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 18px;
+        }
+
+        .card {
+            background: rgba(7,17,29,.82);
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 22px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .card-subtitle {
+            color: #63798d;
+            font-size: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* PERFORMANCE */
+
+        .performance-circle {
+            width: 155px;
+            height: 155px;
+            margin: 10px auto 20px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+            border: 2px solid #008cff;
+            box-shadow:
+                0 0 25px rgba(0,140,255,.15),
+                inset 0 0 25px rgba(0,140,255,.06);
+        }
+
+        .performance-circle strong {
+            font-size: 32px;
+        }
+
+        .performance-circle span {
+            color: #6e8498;
+            font-size: 10px;
+            margin-top: 4px;
+        }
+
+        .boost-btn {
+            width: 100%;
+            padding: 14px;
+
+            border: none;
+            border-radius: 9px;
+
+            background: linear-gradient(135deg, #006eff, #00b7ff);
+            color: #fff;
+
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0,120,255,.18);
+        }
+
+        .boost-btn:hover {
+            filter: brightness(1.12);
+        }
+
+        /* CHECKLIST */
+
+        .check {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 13px 0;
+            border-bottom: 1px solid rgba(255,255,255,.05);
+        }
+
+        .check:last-child {
+            border-bottom: none;
+        }
+
+        .check-info strong {
+            display: block;
+            font-size: 11px;
+        }
+
+        .check-info span {
+            display: block;
+            color: #60778b;
+            font-size: 9px;
+            margin-top: 4px;
+        }
+
+        .badge {
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-size: 8px;
+            color: var(--green);
+            background: rgba(0,208,132,.07);
+            border: 1px solid rgba(0,208,132,.12);
+        }
+
+        /* SENSITIVITY */
+
+        .sensitivity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .sense-item {
+            padding: 15px;
+            background: #050d16;
+            border: 1px solid rgba(0,170,255,.1);
+            border-radius: 9px;
+        }
+
+        .sense-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 9px;
+        }
+
+        .sense-top span:first-child {
+            font-size: 11px;
+        }
+
+        .sense-value {
+            color: var(--blue);
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: #009cff;
+        }
+
+        /* SETTINGS */
+
+        .setting {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,.05);
+        }
+
+        .setting strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .setting span {
+            color: #61778a;
+            font-size: 9px;
+        }
+
+        select {
+            background: #050d16;
+            border: 1px solid #1b3449;
+            color: #fff;
+            border-radius: 7px;
+            padding: 8px 12px;
+            outline: none;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 950px) {
+            .sidebar {
+                width: 190px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 650px) {
+            .topbar {
+                padding: 0 16px;
+            }
+
+            .system {
+                display: none;
+            }
+
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 8px;
+                display: flex;
+                overflow-x: auto;
+            }
+
+            .menu-title,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .nav-btn {
+                min-width: 95px;
+                justify-content: center;
+                flex-direction: column;
+                gap: 4px;
+                padding: 9px;
+                font-size: 9px;
+            }
+
+            .content {
+                padding: 18px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stat-value {
+                font-size: 20px;
+            }
+
+            .sensitivity-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-logo">No.sメ</div>
+
+            <div class="brand-info">
+                <strong>GAMING MODE</strong>
+                <small>CONTROL CENTER</small>
+            </div>
+        </div>
+
+        <div class="system">
+            <span class="online"></span>
+            SYSTEM ONLINE
+        </div>
+
+    </header>
+
+
+    <div class="layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="menu-title">Main Menu</div>
+
+            <button class="nav-btn active" data-page="home">
+                <span class="nav-icon">⌂</span>
+                HOME
+            </button>
+
+            <button class="nav-btn" data-page="game">
+                <span class="nav-icon">◈</span>
+                GAME MODE
+            </button>
+
+            <button class="nav-btn" data-page="boost">
+                <span class="nav-icon">⚡</span>
+                BOOST
+            </button>
+
+            <button class="nav-btn" data-page="sensitivity">
+                <span class="nav-icon">⌁</span>
+                SENSITIVITY
+            </button>
+
+            <button class="nav-btn" data-page="test">
+                <span class="nav-icon">▣</span>
+                PERFORMANCE
+            </button>
+
+            <button class="nav-btn" data-page="settings">
+                <span class="nav-icon">⚙</span>
+                SETTINGS
+            </button>
+
+            <div class="sidebar-bottom">
+                <p>
+                    No.sメ provides gaming
+                    optimization guidance
+                    without modifying game files.
+                </p>
+
+                <button class="logout" onclick="logout()">
+                    LOGOUT
+                </button>
+            </div>
+
+        </aside>
+
+
+        <!-- CONTENT -->
+        <main class="content">
+
+
+            <!-- HOME -->
+            <section class="page active" id="home">
+
+                <div class="page-heading">
+                    <h1>Performance Control Center</h1>
+                    <p>Welcome to your No.sメ gaming environment.</p>
+                </div>
+
+                <div class="stats">
+
+                    <div class="stat">
+                        <div class="stat-label">FPS Target</div>
+                        <div class="stat-value blue">60</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-label">RAM Profile</div>
+                        <div class="stat-value">4 GB</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-label">Display</div>
+                        <div class="stat-value">60 Hz</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-label">Status</div>
+                        <div class="stat-value green">READY</div>
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-grid">
+
+                    <div class="card">
+
+                        <div class="card-title">
+                            Gaming Performance
+                        </div>
+
+                        <div class="card-subtitle">
+                            Current optimization profile
+                        </div>
+
+                        <div class="performance-circle">
+                            <strong id="score">82</strong>
+                            <span>PERFORMANCE</span>
+                        </div>
+
+                        <button class="boost-btn" onclick="activateBoost()">
+                            ⚡ ACTIVATE GAMING MODE
+                        </button>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-title">
+                            Optimization Checklist
+                        </div>
+
+                        <div class="card-subtitle">
+                            Recommended safe actions
+                        </div>
+
+                        <div class="check">
+                            <div class="check-info">
+                                <strong>Background Apps</strong>
+                                <span>Close unnecessary apps</span>
+                            </div>
+                            <div class="badge">CHECK</div>
+                        </div>
+
+                        <div class="check">
+                            <div class="check-info">
+                                <strong>Battery Saver</strong>
+                                <span>Keep gaming performance stable</span>
+                            </div>
+                            <div class="badge">CHECK</div>
+                        </div>
+
+                        <div class="check">
+                            <div class="check-info">
+                                <strong>Storage</strong>
+                                <span>Keep sufficient free space</span>
+                            </div>
+                            <div class="badge">CHECK</div>
+                        </div>
+
+                        <div class="check">
+                            <div class="check-info">
+                                <strong>Network</strong>
+                                <span>Use a stable connection</span>
+                            </div>
+                            <div class="badge">READY</div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- GAME MODE -->
+            <section class="page" id="game">
+
+                <div class="page-heading">
+                    <h1>Game Mode</h1>
+                    <p>Free Fire-friendly performance recommendations.</p>
+                </div>
+
+                <div class="card">
+
+                    <div class="setting">
+                        <div>
+                            <strong>Graphics Profile</strong>
+                            <span>Choose a visual-performance balance</span>
+                        </div>
+
+                        <select>
+                            <option>Smooth</option>
+                            <option>Balanced</option>
+                            <option>High</option>
+                        </select>
+                    </div>
+
+                    <div class="setting">
+                        <div>
+                            <strong>FPS Target</strong>
+                            <span>Recommended target for your device</span>
+                        </div>
+
+                        <select>
+                            <option>30 FPS</option>
+                            <option selected>60 FPS</option>
+                            <option>90 FPS</option>
+                            <option>120 FPS</option>
+                        </select>
+                    </div>
+
+                    <div class="setting">
+                        <div>
+                            <strong>Performance Profile</strong>
+                            <span>Prioritize stable gameplay</span>
+                        </div>
+
+                        <select>
+                            <option>Balanced</option>
+                            <option>Performance</option>
+                            <option>Battery</option>
+                        </select>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- BOOST -->
+            <section class="page" id="boost">
+
+                <div class="page-heading">
+                    <h1>Performance Boost</h1>
+                    <p>Safe optimization checklist for low-end devices.</p>
+                </div>
+
+                <div class="card">
+
+                    <div class="check">
+                        <div class="check-info">
+                            <strong>Close unnecessary background applications</strong>
+                            <span>Free available system resources before gaming.</span>
+                        </div>
+                        <div class="badge">SAFE</div>
+                    </div>
+
+                    <div class="check">
+                        <div class="check-info">
+                            <strong>Disable battery saver while gaming</strong>
+      
